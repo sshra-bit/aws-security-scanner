@@ -8,3 +8,4 @@ __pycache__/
 *.zip
 .env
 terraform/build/
+out.json
