@@ -89,3 +89,28 @@ resource "aws_lambda_function" "scanner" {
 
   depends_on = [aws_cloudwatch_log_group.scanner]
 }
+
+
+# --- DynamoDB: stores every finding from every scan ---
+
+resource "aws_dynamodb_table" "findings" {
+  name         = "${var.project}-findings"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "scan_date"
+  range_key    = "finding_id"
+
+  attribute {
+    name = "scan_date"
+    type = "S"
+  }
+
+  attribute {
+    name = "finding_id"
+    type = "S"
+  }
+
+  ttl {
+    attribute_name = "expires_at"
+    enabled        = true
+  }
+}
